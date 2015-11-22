@@ -1,0 +1,30 @@
+desarrolloInstrumentos_itemListado:
+    path:     /listado
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Item:listado" }
+
+desarrolloInstrumentos_itemVer:
+    path:     /{id}/ver
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Item:ver" }
+
+desarrolloInstrumentos_itemNuevo:
+    path:     /nuevo
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Item:nuevo" }
+
+desarrolloInstrumentos_itemCrear:
+    path:     /crear
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Item:crear" }
+    methods:  POST
+
+desarrolloInstrumentos_itemEditar:
+    path:     /{id}/editar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Item:editar" }
+
+desarrolloInstrumentos_itemActualizar:
+    path:     /{id}/actualizar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Item:actualizar" }
+    methods:  [POST, PUT]
+
+desarrolloInstrumentos_itemEliminar:
+    path:     /{id}/eliminar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Item:eliminar" }
+    methods:  [POST, DELETE]

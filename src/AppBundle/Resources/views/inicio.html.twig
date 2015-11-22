@@ -1,0 +1,15 @@
+{% extends "::base.html.twig" %}
+
+{% block mainwrapper %}
+	<div id="main-wrapper">
+		{% include 'AppBundle::navbar.html.twig' %}
+		
+		{% include 'AppBundle::sidebar.html.twig' %}
+
+		<div id="content-wrapper">
+			{% block contentwrapper %}
+			{% endblock %}
+		</div> <!-- / #content-wrapper -->
+		<div id="main-menu-bg"></div>
+	</div> <!-- / #main-wrapper -->
+{% endblock %}

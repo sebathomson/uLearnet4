@@ -1,0 +1,5 @@
+services:
+    app.PlanArea:
+        public: true
+        class: AppBundle\Repository\PlanAreaRepository
+        arguments: { entityManager: "@doctrine.orm.entity_manager" }

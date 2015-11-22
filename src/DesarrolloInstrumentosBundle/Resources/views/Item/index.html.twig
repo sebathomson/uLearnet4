@@ -1,0 +1,136 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    <style>
+        #content-wrapper .panel-body {
+            padding-top: 0px!important;
+        }
+        #content-wrapper .panel-wide {
+            margin-top: 0px!important;
+        }
+    </style>
+{% endblock %}
+
+{% block mainwrapper %}
+    <div id="main-wrapper">
+        {% include 'AppBundle::navbar.html.twig' %}
+        
+        {% include 'AppBundle::sidebar.html.twig' %}
+
+        <div id="content-wrapper">
+            <ul class="breadcrumb breadcrumb-page">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Desarrollo de Instrumentos de Medición</a></li>
+                <li class="active"><a href="#">Ítem</a></li>
+            </ul>
+
+            <div class="page-header">
+                <h1>
+                    <span class="text-light-gray">Ítem / </span>
+                    {% block acctionheader %}
+                        Listado <small>(<strong>{{ pagination.getTotalItemCount }}</strong> Items)</small>
+                    {% endblock %}
+                </h1>
+                <div class="pull-right">
+                    <a class="btn btn-flat btn-lg btn-labeled btn-success">
+                        <span class="btn-label icon fa fa-plus"></span>Agregar
+                    </a>
+                </div>
+            </div>
+
+            {% block contentwrapper %}
+                <div class="panel search-panel">
+                    <!-- Search form -->
+                    <form action="" class="search-form bg-primary">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon no-background"><i class="fa fa-search"></i></span>
+                            <input type="hidden" name="busqueda" value="true">
+                            <input type="text" name="id" class="form-control" placeholder="Búsqueda por ID de Ítem">
+                            <span class="input-group-btn">
+                                <button class="btn btn-labeled" type="submit">Buscar</button>
+                                <button id="btn-busqueda-avanzada" class="btn btn-labeled">Búsqueda Avanzada</button>
+                            </span>
+                        </div> <!-- / .input-group -->
+                    </form>
+                </div>
+
+                <hr>
+
+                {% for item in pagination %}
+                    <div class="panel table-light">
+                        <div class="panel-heading">
+                            <span class="panel-title">
+                                <i class="panel-title-icon fa fa-file"></i>Ítem <strong>{{ item.idItem }}</strong>
+                            </span>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Nivel</th>
+                                    <th>Área</th>
+                                    <th>Eje Temático</th>
+                                    <th>Unidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td># Cambiar #</td>
+                                    <td># Cambiar #</td>
+                                    <td># Cambiar #</td>
+                                    <td># Cambiar #</td>
+                                    <td># Cambiar #</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="panel-body">
+                            <hr class="panel-wide">
+                            <dl class="dl-horizontal">
+                                <dt>Desarrollador</dt>
+                                <dd># Cambiar # <small>(# Cambiar #)</small></dd>
+                                <dt>Estado</dt>
+                                <dd><span class="label label-success"># Cambiar #</span></dd>
+                                <dt>Validador</dt>
+                                <dd># Cambiar # <small>(# Cambiar #)</small></dd>
+                            </dl>
+                            <hr class="panel-wide">
+                            <dl class="dl-horizontal">
+                                <dt>Contenido</dt>
+                                <dd># Cambiar #</dd>
+                                <dt>Pregunta</dt>
+                                <dd>
+                                    {{ item.preguntaItem | raw }}
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="text-right">
+                                {# <div class="btn-group"> #}
+                                <a class="btn btn-flat btn-labeled btn-warning"><span class="btn-label icon fa fa-pencil"></span>Editar</a>
+                                <a class="btn btn-flat btn-labeled btn-primary"><span class="btn-label icon fa fa-files-o"></span>Clonar</a>
+                                <a class="btn btn-flat btn-labeled btn-info"><span class="btn-label icon fa fa-eye"></span>Ver</a>
+                                {# </div> #}
+                                <div class="clear-fix"></div>
+                            </div>
+                            <div class="clear-fix"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="navigation text-center">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            {% endblock %}
+        </div> <!-- / #content-wrapper -->
+        <div id="main-menu-bg"></div>
+    </div> <!-- / #main-wrapper -->
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('#btn-busqueda-avanzada').on('click', function(event) {
+            event.preventDefault();
+            
+        });
+    </script>
+{% endblock %}

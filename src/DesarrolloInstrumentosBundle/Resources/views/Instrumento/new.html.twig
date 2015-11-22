@@ -1,0 +1,142 @@
+{% extends "DesarrolloInstrumentosBundle:Instrumento:index.html.twig" %}
+
+{% block acctionheader %}
+	Agregar
+{% endblock %}
+
+{% block btnheader %}
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block contentwrapper %}
+	<form action="{{ path('desarrolloInstrumentos_instrumentoCrear') }}" method="POST" class="form-horizontal">
+		<div class="panel">
+			<div class="panel-heading">
+				<span class="panel-title">
+					<i class="panel-title-icon fa fa-file"></i>Encabezado Instrumento</strong>
+				</span>
+			</div>
+			<div class="panel-body">
+				<div class="row form-group">
+					<label for="{{ form.tip.vars.id }}" class="col-sm-4 control-label">{{ form.tip.vars.label }}:</label>
+					<div class="col-sm-8">
+						{{ form_widget(form.tip, { 'attr': {'class': 'form-control'} }) }}
+					</div>
+				</div>
+				<div class="row form-group">
+					<label for="{{ form.plan.vars.id }}" class="col-sm-4 control-label">{{ form.plan.vars.label }}:</label>
+					<div class="col-sm-8">
+						{{ form_widget(form.plan, { 'attr': {'class': 'form-control'} }) }}
+					</div>
+				</div>
+				<div class="row form-group">
+					<label for="{{ form.nivel.vars.id }}" class="col-sm-4 control-label">{{ form.nivel.vars.label }}:</label>
+					<div class="col-sm-8">
+						{{ form_widget(form.nivel, { 'attr': {'class': 'form-control'} }) }}
+					</div>
+				</div>
+				<div class="row form-group">
+					<label for="{{ form.area.vars.id }}" class="col-sm-4 control-label">{{ form.area.vars.label }}:</label>
+					<div class="col-sm-8">
+						{{ form_widget(form.area, { 'attr': {'class': 'form-control'} }) }}
+					</div>
+				</div>
+				<hr class="panel-wide">
+				<div class="row form-group">
+					<label for="{{ form.nombre.vars.id }}" class="col-sm-4 control-label">{{ form.nombre.vars.label }}:</label>
+					<div class="col-sm-8">
+						{{ form_widget(form.nombre, { 'attr': {'class': 'form-control'} }) }}
+					</div>
+				</div>
+				<div class="row form-group">
+					<label for="{{ form.descripcion.vars.id }}" class="col-sm-4 control-label">{{ form.descripcion.vars.label }}:</label>
+					<div class="col-sm-8">
+						{{ form_widget(form.descripcion, { 'attr': {'class': 'form-control'} }) }}
+					</div>
+				</div>
+				<div class="row form-group hidden">
+					<div class="col-sm-8">
+						{{ form_widget(form._token) }}
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<div class="text-right">
+					{# <div class="btn-group"> #}
+					<a href="{{ path('desarrolloInstrumentos_instrumentoListado') }}" class="btn btn-flat btn-labeled btn-default"><span class="btn-label icon fa fa-arrow-left"></span>Volver</a>
+					<button class="btn btn-flat btn-labeled btn-info" type="reset"><span class="btn-label icon fa fa-eraser"></span>Limpiar</button>
+					<button class="btn btn-flat btn-labeled btn-success" type="submit"><span class="btn-label icon fa fa-arrow-right"></span>Continuar</button>
+					{# </div> #}
+					<div class="clear-fix"></div>
+				</div>
+				<div class="clear-fix"></div>
+			</div>
+		</div>
+	</form>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		function obtenerNivelesPorPlan() {
+			datos = {
+				'idPlan': $('#{{ form.plan.vars.id }}').val(),
+			};
+
+			$.getJSON('{{ path('apiObtenerNivelesPorPlan') }}', datos, function(data, textStatus, xhr) {
+				select = $('#{{ form.nivel.vars.id }}').find('option').first().text();
+
+				$('#{{ form.nivel.vars.id }}').html('');
+
+				var options = '<option value="" selected="selected">' + select + '</option>';
+
+				for (var i = 0; i < data.length; i++) {
+					options += "<option value=" + data[i].idNivel + ">" + data[i].nombreNivel + '</option>';
+				};
+
+				$('#{{ form.nivel.vars.id }}').html(options);
+
+				// Limpiar el select de las áreas.
+				select = $('#{{ form.area.vars.id }}').find('option').first().text();
+
+				$('#{{ form.area.vars.id }}').html('');
+
+				var options = '<option value="" selected="selected">' + select + '</option>';
+
+				$('#{{ form.area.vars.id }}').html(options);
+			});
+		}
+
+		function obtenerAreasPorPlan() {
+			datos = {
+				'idPlan': $('#{{ form.plan.vars.id }}').val(),
+				'idNivel': $('#{{ form.nivel.vars.id }}').val()
+			};
+
+			$.getJSON('{{ path('apiObtenerAreasPorPlan') }}', datos, function(data, textStatus, xhr) {
+				select = $('#{{ form.area.vars.id }}').find('option').first().text();
+
+				$('#{{ form.area.vars.id }}').html('');
+
+				var options = '<option value="" selected="selected">' + select + '</option>';
+
+				for (var i = 0; i < data.length; i++) {
+					options += "<option value=" + data[i].idArea + ">" + data[i].nombreArea + '</option>';
+				};
+
+				$('#{{ form.area.vars.id }}').html(options);
+			});   
+		}
+
+		$('#{{ form.plan.vars.id }}').on('change', function(event) {
+			event.preventDefault();
+			obtenerNivelesPorPlan( $(this).val() );
+		});
+
+		$('#{{ form.nivel.vars.id }}').on('change', function(event) {
+			event.preventDefault();
+			obtenerAreasPorPlan( $(this).val() );
+		});
+	</script>
+{% endblock %}

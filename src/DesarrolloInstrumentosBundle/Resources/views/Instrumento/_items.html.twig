@@ -1,0 +1,100 @@
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="jq-datatables-items">
+	<thead>
+		<tr>
+			<th class="col-md-1">#</th>
+			<th class="col-md-1">ID</th>
+			<th class="">Nombre</th>
+			<th class="col-md-1"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in arrItems %}
+			<tr class="{% if idItem is defined and idItem == item.idItem %}success{% endif %}">
+				<td>{{ loop.index }}</td>
+				<td><a href="{{ path('desarrolloInstrumentos_itemVer', { 'id': item.idItem }) }}">{{ item.idItem }}</a></td>
+				<td>{{ item.preguntaItem | raw() }}</td>
+				<td class="text-right">
+					<a href="#" class="btn btn-flat btn-labeled btn-danger btn-quitar-item" data-id="{{ item.idInstrumentoItem }}" data-iditem="{{ item.idItem }}"><span class="btn-label icon fa fa-times"></span>Quitar</a>
+				</td>
+			</tr>
+			{% else %}
+		{% endfor %}
+	</tbody>
+</table>
+
+<script>
+	function agregarDatatableItems()
+	{
+		$('#jq-datatables-items').dataTable({
+			"language": {
+				"url": "{{ asset('bundles/app/javascripts/datatable.lang.es.json') }}"
+			},
+			"initComplete": function( settings, json ) {
+				$('#jq-datatables-items_wrapper .dataTables_filter input').attr('placeholder', 'Buscar...');
+			}
+		});
+	}
+
+	function quitarItem(idItem)
+	{
+		datos = {
+			'idInstrumentoItem': idItem
+		}
+
+		$.ajax({
+			url: '{{ path('desarrolloInstrumentos_instrumentoQuitarItem') }}',
+			type: 'POST',
+			data: datos,
+		})
+		.done(function(data) {
+			mensaje =  "<div class='alert alert-success alert-dark'>";
+			mensaje += "<button type='button' class='close' data-dismiss='alert'>×</button>";
+			mensaje += "<strong>Exito!</strong> " + data + "."
+			mensaje += "</div>"
+
+			$('#div-mensaje-agregar-item').html(mensaje);
+
+			obtenerItems();
+		})
+		.fail(function(data) {
+			mensaje =  "<div class='alert alert-danger alert-dark'>";
+			mensaje += "<button type='button' class='close' data-dismiss='alert'>×</button>";
+			mensaje += "<strong>Error!</strong> " + data.responseText + "."
+			mensaje += "</div>"
+
+			$('#div-mensaje-agregar-item').html(mensaje);
+		});
+	}
+
+	function agregarAccionQuitarItem()
+	{
+		$('.btn-quitar-item').on('click', function(event) {
+			event.preventDefault();
+
+			idInstrumentoItem = $(this).data('id');
+			idItem            = $(this).data('iditem');
+
+			bootbox.confirm({
+				message: "¿Estás seguro de quitar el ítem <strong>" + idItem + "</strong>?",
+				callback: function(result) {
+					if (result) {
+						quitarItem(idInstrumentoItem);
+					};
+				},
+				className: "bootbox-sm"
+			});
+
+		});
+	}
+
+	{% if isAjax is defined %}
+	agregarDatatableItems();
+	agregarAccionQuitarItem	();
+	{% else %}
+	init.push(function () {
+		agregarDatatableItems();
+		agregarAccionQuitarItem	();
+	});	
+	{% endif %}
+
+</script>

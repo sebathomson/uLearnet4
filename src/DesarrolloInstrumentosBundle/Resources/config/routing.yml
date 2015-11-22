@@ -1,0 +1,7 @@
+desarrolloInstrumentos_item:
+    resource: "@DesarrolloInstrumentosBundle/Resources/config/routing/item.yml"
+    prefix:   /item
+
+desarrolloInstrumentos_instrumento:
+    resource: "@DesarrolloInstrumentosBundle/Resources/config/routing/instrumento.yml"
+    prefix:   /instrumento

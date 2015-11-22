@@ -1,0 +1,96 @@
+{% extends "DesarrolloInstrumentosBundle:Instrumento:index.html.twig" %}
+
+{% block acctionheader %}
+	<span class="text-light-gray"><a href="{{ path('desarrolloInstrumentos_instrumentoVer', { 'id': id }) }}">Ver <strong>({{ id }})</strong></a> / </span>
+	Previsualizar
+{% endblock %}
+
+{% block btnheader %}
+{% endblock %}
+
+{% block contentwrapper %}
+	{% if esInicio == true %}
+		<div class="jumbotron">
+			<div class="container-fluid">
+				<div class="col-md-3">
+					<dl>
+						<dt>Tipo Instrumento</dt>
+						<dd>## CAMBIAR ##</dd>
+					</dl>
+					<dl>
+						<dt>Plan</dt>
+						<dd>## CAMBIAR ##</dd>
+					</dl>
+					<dl>
+						<dt>Periodo</dt>
+						<dd>## CAMBIAR ##</dd>
+					</dl>
+					<dl>
+						<dt>Nivel</dt>
+						<dd>## CAMBIAR ##</dd>
+					</dl>
+					<dl>
+						<dt>Área</dt>
+						<dd>## CAMBIAR ##</dd>
+					</dl>
+				</div>
+				<div class="col-md-9 text-center">
+					<h1>{{ entity.nombre }}</h1>
+					<p>{{ entity.descripcion }}</p>
+					<p><a class="btn btn-primary btn-flat btn-lg btn-block" href="{{ path('desarrolloInstrumentos_instrumentoPrevisualizar', { 'id': id }) }}?page=1" role="button">Iniciar</a></p>
+				</div>
+			</div>
+		</div>
+		{% else %}
+		<div class="jumbotron">
+			<div class="container-fluid">
+				<ul class="breadcrumb breadcrumb-page">
+					<li>Tipo Instrumento: <strong>## Cambiar ##</strong></li>
+					<li>Plan: <strong>## Cambiar ##</strong></li>
+					<li>Periodo: <strong>## Cambiar ##</strong></li>
+					<li>Nivel: <strong>## Cambiar ##</strong></li>
+					<li>Área: <strong>## Cambiar ##</strong></li>
+					<li>Ítem: <strong>{{ page }}</strong></li>
+				</ul>
+
+				{% for item in pagination %}
+					<p>{{ item.preguntaItem | raw() }}</p>
+					<hr>
+					<p>
+						<div class="radio">
+							<label>
+								<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" class="px" checked="">
+								<span class="lbl">## Cambiar ## hay que arreglar la relación ítem -> alternativa</span>
+							</label>
+						</div> <!-- / .radio -->
+						<div class="radio">
+							<label>
+								<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" class="px">
+								<span class="lbl">## Cambiar ## hay que arreglar la relación ítem -> alternativa</span>
+							</label>
+						</div> <!-- / .radio -->
+						<div class="radio">
+							<label>
+								<input type="radio" name="optionsRadios" id="optionsRadios2-2" value="option2" class="px">
+								<span class="lbl">## Cambiar ## hay que arreglar la relación ítem -> alternativa</span>
+							</label>
+						</div> <!-- / .radio -->
+					</p>
+					<hr>
+				{% endfor %}
+
+				<p>
+					<a class="btn btn-primary btn-flat btn-lg btn-block" href="#">
+						Guardar y Continuar
+						<i class="fa fa-arrow-right"></i>
+					</a>
+				</p>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="navigation text-center">
+				{{ knp_pagination_render(pagination) }}
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

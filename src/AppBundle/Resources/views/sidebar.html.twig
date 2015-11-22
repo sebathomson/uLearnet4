@@ -1,0 +1,45 @@
+<div id="main-menu" role="navigation">
+	<div id="main-menu-inner">
+		<div class="menu-content top" id="menu-content-demo">
+			<div>
+				<div class="text-bg">
+					<span class="text-slim">sthomson</span>
+				</div> {# CAMBIAR username #}
+				<div>
+					<span class="text-slim">Coordinador Área</span>
+				</div>
+
+				<img src="{{ asset('bundles/app/images/pixel-admin/avatar.png') }}" alt="" class="">
+				<div class="btn-group"></div>
+			</div>
+		</div>
+		<ul class="navigation">
+			<li>
+				<a href="#">
+					<i class="menu-icon fa fa-home"></i>
+					<span class="mm-text">Inicio</span>
+				</a>
+			</li>
+			<li class="mm-dropdown">
+				<a href="#">
+					<i class="menu-icon fa fa-inbox"></i>
+					<span class="mm-text">Desarrollo Instrumentos</span>
+				</a>
+				<ul>
+					<li>
+						<a tabindex="-1" href="{{ path('desarrolloInstrumentos_itemListado') }}">
+							<i class="menu-icon fa fa-file"></i>
+							<span class="mm-text">Ítems</span>
+						</a>
+					</li>
+					<li>
+						<a tabindex="-1" href="{{ path('desarrolloInstrumentos_instrumentoListado') }}">
+							<i class="menu-icon fa fa-list-alt"></i>
+							<span class="mm-text">Instrumentos</span>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div> <!-- / #main-menu-inner -->
+		</div> <!-- / #main-menu -->

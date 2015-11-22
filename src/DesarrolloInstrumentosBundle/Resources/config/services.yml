@@ -1,0 +1,9 @@
+services:
+    desarrolloInstrumentos.Item:
+        public: true
+        class: DesarrolloInstrumentosBundle\Repositories\ItemRepository
+        arguments: { entityManager: "@doctrine.orm.entity_manager" }
+    desarrolloInstrumentos.Instrumento:
+        public: true
+        class: DesarrolloInstrumentosBundle\Repositories\InstrumentoRepository
+        arguments: { entityManager: "@doctrine.orm.entity_manager" }

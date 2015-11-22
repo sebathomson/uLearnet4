@@ -1,0 +1,12 @@
+# EditorConfig is awesome: http://EditorConfig.org
+# 
+# Configuración desarrollada por Sebastián Thomson.
+
+# top-most EditorConfig file
+root = true
+
+# todos los archivos PHP del proyeto
+[*.php]
+indent_style = tab
+indent_size = 4
+charset = utf-8

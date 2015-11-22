@@ -1,0 +1,285 @@
+{% extends "DesarrolloInstrumentosBundle:Instrumento:index.html.twig" %}
+
+{% block acctionheader %}
+	Ver <strong>({{ id }})</strong>
+	{% if entity.getIns() != null %} 
+		<a href="{{ path('desarrolloInstrumentos_instrumentoVer', { 'id': entity.getIns().getId() }) }}">
+			<small>
+				Clon del instrumento <strong>{{ entity.getIns().getId() }}</strong>
+			</small>
+		</a>
+	{% endif %}
+{% endblock %}
+
+{% block btnheader %}
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block contentwrapper %}
+	{# Encabezado Instrumento #}
+	<div class="panel">
+		<div class="panel-heading">
+			<span class="panel-title">
+				<i class="panel-title-icon fa fa-file"></i>Encabezado</strong>
+			</span>
+		</div>
+		<table class="table table-striped">
+			<tbody>
+				<tr>
+					<th>Tipo Instrumento</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+				<tr>
+					<th>Plan</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+				<tr>
+					<th>Periodo</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+				<tr>
+					<th>Nivel</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+				<tr>
+					<th>Área</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+				<tr>
+					<th>Nombre</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+				<tr>
+					<th>Descripción</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="panel-footer">
+			<div class="text-right">
+				{# <div class="btn-group"> #}
+				<a href="{{ path('desarrolloInstrumentos_instrumentoPrevisualizar', { 'id': id }) }}" class="btn btn-flat btn-labeled btn-info"><span class="btn-label icon fa fa-eye"></span>Previsualizar</a>
+				<a href="#" class="btn btn-flat btn-labeled btn-warning"><span class="btn-label icon fa fa-pencil"></span>Editar</a>
+				<a id="btn-clonar-instrumento" href="#" class="btn btn-flat btn-labeled btn-primary"><span class="btn-label icon fa fa-files-o"></span>Clonar</a>
+				<a id="btn-eliminar-instrumento" href="#" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-trash-o"></span>Eliminar</a>
+				{# </div> #}
+				<div class="clear-fix"></div>
+			</div>
+			<div class="clear-fix"></div>
+		</div>
+	</div>
+	{# Validar Instrumento #}
+	<div class="panel">
+		<div class="panel-heading">
+			<span class="panel-title">
+				<i class="panel-title-icon fa fa-file"></i>Estado</strong>
+			</span>
+		</div>
+		<table class="table table-striped">
+			<tbody>
+				<tr>
+					<th>Estado</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+				<tr>
+					<th>Observaciones</th>
+					<td>## CAMBIAR ##</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="panel-footer">
+			<div class="text-right">
+				{# <div class="btn-group"> #}
+				<a href="#" class="btn btn-flat btn-labeled btn-info"><span class="btn-label icon fa fa-book"></span>Historial</a>
+				<a href="#" class="btn btn-flat btn-labeled btn-success"><span class="btn-label icon fa fa-floppy-o"></span>Validar</a>
+				{# </div> #}
+				<div class="clear-fix"></div>
+			</div>
+			<div class="clear-fix"></div>
+		</div>
+	</div>
+	{# Items #}
+	<div class="panel">
+		<div class="panel-heading">
+			<span class="panel-title">
+				<i class="panel-title-icon fa fa-file"></i>Items</strong>
+			</span>
+		</div>
+		<div class="panel-body search-panel">
+			<!-- Search form -->
+			{# <form action="" class="search-form bg-primary"> #}
+			<div id="div-agregar-item" class="input-group input-group-lg tab-content-padding">
+				<span class="input-group-addon no-background"><i class="fa fa-plus"></i></span>
+				<input type="hidden" id="idInstrumento" name="idInstrumento" value="{{ id }}">
+				<input type="text" id="idItem" name="idItem" class="form-control" placeholder="Agregar por ID de Ítem">
+				<span class="input-group-btn">
+					<a id="btn-agregar-item" class="btn btn-labeled btn-success btn-flat" type="submit">Agregar</a>
+					<a id="btn-busqueda-avanzada" class="btn btn-labeled btn-default btn-flat">Buscar</a>
+				</span>
+			</div> <!-- / .input-group -->
+			{# </form> #}
+
+			<div id="div-mensaje-agregar-item">
+				
+			</div>
+
+			<div id="div-items-instrumento" class="table-light">
+				{% include 'DesarrolloInstrumentosBundle:Instrumento:_items.html.twig' %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		function obtenerItems(idItem) {
+			datos = {
+				'idInstrumento': {{ id }},
+				'idItem': idItem
+			}
+
+			$.ajax({
+				url: '{{ path('desarrolloInstrumentos_instrumentoObtenerItems') }}',
+				type: 'GET',
+				data: datos,
+			})
+			.done(function(data) {
+				$('#div-items-instrumento').html(data);
+			})
+			.fail(function(data) {
+				// 
+			});
+		}
+
+		init.push(function () {
+			// Eliminar Instrumento
+			$('#btn-eliminar-instrumento').on('click', function(event) {
+				event.preventDefault();
+
+				bootbox.confirm({
+					message: "¿Estás seguro de eliminar el instrumento <strong>" + {{ id }} + "</strong>?",
+					callback: function(result) {
+						if (result) {
+
+							datos = {
+								'idInstrumento': {{ id }}
+							}
+
+							$.ajax({
+								url: '{{ path('desarrolloInstrumentos_instrumentoEliminar') }}',
+								type: 'POST',
+								data: datos,
+							})
+							.done(function(data) {
+								bootbox.confirm({
+									message: "Instrumento eliminado correctamente",
+									callback: function(result) {
+										window.location = '{{ path('desarrolloInstrumentos_instrumentoListado') }}';
+									},
+									className: "bootbox-sm"
+								});
+							})
+							.fail(function(data) {
+								bootbox.confirm({
+									message: "Hubo un error al eliminar el instrumento",
+									callback: function(result) {
+
+									},
+									className: "bootbox-sm"
+								});
+							});
+						};
+					},
+					className: "bootbox-sm"
+				});
+			});
+
+			// Clonar Instrumento
+			$('#btn-clonar-instrumento').on('click', function(event) {
+				event.preventDefault();
+
+				bootbox.prompt({
+					title: "Ingresar nombre del Instrumento",
+					value: "Clon: {{ entity.nombre }}",
+					callback: function(result) {
+						if (result != null) {
+							datos = {
+								'nombre': result
+							}
+
+							$.ajax({
+								url: '{{ path('desarrolloInstrumentos_instrumentoClonar', { 'id': id }) }}',
+								type: 'POST',
+								data: datos,
+							})
+							.done(function(data) {
+								bootbox.confirm({
+									message: "Instrumento clonado correctamente",
+									callback: function(result) {
+										window.location = data;
+									},
+									className: "bootbox-sm"
+								});
+							})
+							.fail(function(data) {
+								bootbox.confirm({
+									message: "Hubo un error al clonar el instrumento",
+									callback: function(result) {
+
+									},
+									className: "bootbox-sm"
+								});
+							});
+						}
+					}
+				});
+				//
+			});
+
+			// Agregar items a un instrumento
+			$('#btn-agregar-item').on('click', function(event) {
+				event.preventDefault();
+
+				idItem = $('#div-agregar-item').find('#idItem').val();
+
+				datos = {
+					'idItem': idItem,
+					'idInstrumento': {{ id }}
+				}
+
+				$('#div-agregar-item').find('#idItem').val('');
+				$('#div-mensaje-agregar-item').html('');
+
+				$.ajax({
+					url: '{{ path('desarrolloInstrumentos_instrumentoAgregarItem') }}',
+					type: 'POST',
+					data: datos,
+				})
+				.done(function(data) {
+					mensaje =  "<div class='alert alert-success alert-dark'>";
+					mensaje += "<button type='button' class='close' data-dismiss='alert'>×</button>";
+					mensaje += "<strong>Exito!</strong> " + data + "."
+					mensaje += "</div>"
+
+					$('#div-mensaje-agregar-item').html(mensaje);
+
+					obtenerItems(idItem);
+				})
+				.fail(function(data) {
+					mensaje =  "<div class='alert alert-danger alert-dark'>";
+					mensaje += "<button type='button' class='close' data-dismiss='alert'>×</button>";
+					mensaje += "<strong>Error!</strong> " + data.responseText + "."
+					mensaje += "</div>"
+
+					$('#div-mensaje-agregar-item').html(mensaje);
+				});
+			});
+			//
+		});
+
+		// Init
+		window.PixelAdmin.start(init);
+	</script>
+{% endblock %}

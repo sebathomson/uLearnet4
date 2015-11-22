@@ -1,0 +1,14 @@
+app_security:
+    resource: "@AppSecurityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix:   /
+
+desarrolloInstrumentos:
+    resource: "@DesarrolloInstrumentosBundle/Resources/config/routing.yml"
+    prefix:   /DesarrolloInstrumentos
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

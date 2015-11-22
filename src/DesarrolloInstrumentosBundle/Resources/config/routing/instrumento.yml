@@ -1,0 +1,54 @@
+desarrolloInstrumentos_instrumentoListado:
+    path:     /listado
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:listado" }
+
+desarrolloInstrumentos_instrumentoVer:
+    path:     /{id}/ver
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:ver" }
+
+desarrolloInstrumentos_instrumentoPrevisualizar:
+    path:     /{id}/previsualizar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:previsualizar" }
+
+desarrolloInstrumentos_instrumentoClonar:
+    path:     /{id}/clonar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:clonar" }
+
+desarrolloInstrumentos_instrumentoNuevo:
+    path:     /nuevo
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:nuevo" }
+
+desarrolloInstrumentos_instrumentoCrear:
+    path:     /crear
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:crear" }
+    methods:  POST
+
+desarrolloInstrumentos_instrumentoEditar:
+    path:     /{id}/editar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:editar" }
+
+desarrolloInstrumentos_instrumentoActualizar:
+    path:     /{id}/actualizar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:actualizar" }
+    methods:  [POST, PUT]
+
+desarrolloInstrumentos_instrumentoEliminar:
+    path:     /eliminar
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:eliminar" }
+    methods:  [POST, DELETE]
+
+# Items por Instrumento
+desarrolloInstrumentos_instrumentoAgregarItem:
+    path:     /agregarItem
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:agregarItem" }
+    methods:  [POST]
+
+desarrolloInstrumentos_instrumentoQuitarItem:
+    path:     /quitarItem
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:quitarItem" }
+    methods:  [POST, DELETE]
+
+desarrolloInstrumentos_instrumentoObtenerItems:
+    path:     /obtenerItems
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:obtenerItems" }
+    methods:  [GET]

@@ -1,0 +1,11 @@
+appInicio:
+    path:     /
+    defaults: { _controller: AppBundle:Default:index }
+
+apiObtenerNivelesPorPlan:
+    path:     /obtenerNivelesPorPlan
+    defaults: { _controller: AppBundle:Api:obtenerNivelesPorPlan }
+
+apiObtenerAreasPorPlan:
+    path:     /obtenerAreasPorPlan
+    defaults: { _controller: AppBundle:Api:obtenerAreasPorPlan }
