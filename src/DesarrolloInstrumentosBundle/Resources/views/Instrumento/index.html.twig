@@ -1,138 +1,231 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-    Instrumento
+	Instrumento
 {% endblock %}
 
 {% block stylesheets %}
-    <style>
-        #content-wrapper .panel-body {
-            padding-top: 0px!important;
-        }
-        #content-wrapper .panel-wide {
-            margin-top: 0px!important;
-        }
-    </style>
+	<style>
+		#content-wrapper .panel-body {
+			padding-top: 0px!important;
+		}
+		#content-wrapper .panel-wide {
+			margin-top: 0px!important;
+		}
+		.panel-body dd, .panel-body dt {
+			padding-top: 5px;
+		}
+	</style>
 {% endblock %}
 
 {% block mainwrapper %}
-    <div id="main-wrapper">
-        {% include 'AppBundle::navbar.html.twig' %}
-        
-        {% include 'AppBundle::sidebar.html.twig' %}
+	<div id="main-wrapper">
+		{% include 'AppBundle::navbar.html.twig' %}
+		
+		{% include 'AppBundle::sidebar.html.twig' %}
 
-        <div id="content-wrapper">
-            <ul class="breadcrumb breadcrumb-page">
-                <li><a href="{{ path('appInicio') }}">Inicio</a></li>
-                <li>Desarrollo de Instrumentos de Medición</li>
-                <li class="active"><a href="{{ path('desarrolloInstrumentos_instrumentoListado') }}">Instrumento</a></li>
-            </ul>
+		<div id="content-wrapper">
+			<ul class="breadcrumb breadcrumb-page">
+				<li><a href="{{ path('appInicio') }}">Inicio</a></li>
+				<li>Desarrollo de Instrumentos de Medición</li>
+				<li class="active"><a href="{{ path('desarrolloInstrumentos_instrumentoListado') }}">Instrumento</a></li>
+			</ul>
 
-            <div class="page-header">
-                <h1>
-                    <span class="text-light-gray"><a href="{{ path('desarrolloInstrumentos_instrumentoListado') }}">Instrumento</a> / </span>
-                    {% block acctionheader %}
-                        Listado <small>(<strong>{{ pagination.getTotalItemCount }}</strong> Items)</small>
-                    {% endblock %}
-                </h1>
-                {% block btnheader %}
-                    <div class="pull-right">
-                        <a href="{{ path('desarrolloInstrumentos_instrumentoNuevo') }}" class="btn btn-flat btn-lg btn-labeled btn-success">
-                            <span class="btn-label icon fa fa-plus"></span>Agregar
-                        </a>
-                    </div>
-                {% endblock %}
-            </div>
+			<div class="page-header">
+				<h1>
+					<span class="text-light-gray"><a href="{{ path('desarrolloInstrumentos_instrumentoListado') }}">Instrumento</a> / </span>
+					{% block acctionheader %}
+						Listado <small>(<strong>{{ pagination.getTotalItemCount }}</strong> Items)</small>
+					{% endblock %}
+				</h1>
+				{% block btnheader %}
+					<div class="pull-right">
+						<a href="{{ path('desarrolloInstrumentos_instrumentoNuevo') }}" class="btn btn-flat btn-lg btn-labeled btn-success">
+							<span class="btn-label icon fa fa-plus"></span>Agregar
+						</a>
+					</div>
+				{% endblock %}
+			</div>
 
-            {% block contentwrapper %}
-                <div class="panel search-panel">
-                    <!-- Search form -->
-                    <form action="" class="search-form bg-primary">
-                        <div class="input-group input-group-lg">
-                            <span class="input-group-addon no-background"><i class="fa fa-search"></i></span>
-                            <input type="hidden" name="busqueda" value="true">
-                            <input type="text" name="id" class="form-control" placeholder="Búsqueda por ID de Instrumento">
-                            <span class="input-group-btn">
-                                <button class="btn btn-labeled" type="submit">Buscar</button>
-                                <button id="btn-busqueda-avanzada" class="btn btn-labeled">Búsqueda Avanzada</button>
-                            </span>
-                        </div> <!-- / .input-group -->
-                    </form>
-                </div>
+			{% block contentwrapper %}
+				<div class="panel search-panel">
+					<!-- Search form -->
+					<form action="" class="search-form bg-primary">
+						<div class="input-group input-group-lg">
+							<span class="input-group-addon no-background"><i class="fa fa-search"></i></span>
+							<input type="hidden" name="busqueda" value="true">
+							<input type="text" name="id" class="form-control" placeholder="Búsqueda por ID de Instrumento">
+							<span class="input-group-btn">
+								<button class="btn btn-labeled btn-info btn-flat" type="submit">Buscar</button>
+								<button id="btn-busqueda-avanzada" class="btn btn-labeled btn-primary btn-flat">Búsqueda Avanzada</button>
+							</span>
+						</div> <!-- / .input-group -->
+					</form>
+				</div>
 
-                <hr>
+				<hr>
 
-                {% for instrumento in pagination %}
-                    <div class="panel table-light">
-                        <div class="panel-heading">
-                            <span class="panel-title">
-                                <i class="panel-title-icon fa fa-file"></i>Instrumento <strong>{{ instrumento.idInstrumento }}</strong>
-                            </span>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Tipo Prueba</th>
-                                    <th>Plan</th>
-                                    <th>Nivel</th>
-                                    <th>Área</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ instrumento.nombreTipoInstrumento }}</td>
-                                    <td># Cambiar #</td>
-                                    <td>{{ instrumento.nombreArea }}</td>
-                                    <td>{{ instrumento.nombreNivel }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="panel-body">
-                            <hr class="panel-wide">
-                            <dl class="dl-horizontal">
-                                <dt>Desarrollador</dt>
-                                <dd>{#{ instrumento.nombreDesarrollador }} {{ instrumento.apellidoPaternoDesarrollador }} {{ instrumento.apellidoMaternoDesarrollador }#} <small>({#{ instrumento.fechaInstrumento | date('Y-m-d H:i:s') }#})</small></dd>
-                                <dt>Estado</dt>
-                                <dd><span class="label label-success"># Cambiar #</span></dd>
-                                <dt>Validador</dt>
-                                <dd># Cambiar # <small>(# Cambiar #)</small></dd>
-                            </dl>
-                            <hr class="panel-wide">
-                            <dl class="dl-horizontal">
-                                <dt>Nombre</dt>
-                                <dd>{{ instrumento.nombreInstrumento }}</dd>
-                                <dt>Descripción</dt>
-                                <dd>{{ instrumento.descripcionInstrumento }}</dd>
-                            </dl>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="text-right">
-                                {# <div class="btn-group"> #}
-                                <a class="btn btn-flat btn-labeled btn-warning"><span class="btn-label icon fa fa-pencil"></span>Editar</a>
-                                <a class="btn btn-flat btn-labeled btn-primary"><span class="btn-label icon fa fa-files-o"></span>Clonar</a>
-                                <a href="{{ path('desarrolloInstrumentos_instrumentoVer', { 'id': instrumento.idInstrumento }) }}" class="btn btn-flat btn-labeled btn-info"><span class="btn-label icon fa fa-eye"></span>Ver</a>
-                                {# </div> #}
-                                <div class="clear-fix"></div>
-                            </div>
-                            <div class="clear-fix"></div>
-                        </div>
-                    </div>
-                {% endfor %}
+				{% for instrumento in pagination %}
+					<div class="panel table-light">
+						<div class="panel-heading">
+							<span class="panel-title">
+								<i class="panel-title-icon fa fa-file"></i>Instrumento <strong>{{ instrumento.idInstrumento }}</strong>
+							</span>
+						</div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Tipo Prueba</th>
+									<th>Plan</th>
+									<th>Nivel</th>
+									<th>Área</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{ instrumento.nombreTipoInstrumento }}</td>
+									<td>{{ instrumento.nombrePlan }}</td>
+									<td>{{ instrumento.nombreArea }}</td>
+									<td>{{ instrumento.nombreNivel }}</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="panel-body">
+							<hr class="panel-wide">
+							<dl class="dl-horizontal">
+								<dt>Desarrollador</dt>
+								<dd>{{ instrumento.nombresDesarrollador }} {{ instrumento.apellidoPaternoDesarrollador }} {{ instrumento.apellidoMaternoDesarrollador }} <small>({{ instrumento.fechaCreacionInstrumento | date('Y-m-d H:i:s') }})</small></dd>
+								<dt>Estado</dt>
+								<dd>
+									{% set historial = arrEstadosInstrumento[ instrumento.idInstrumento ] %}
 
-                <div class="navigation text-center">
-                    {{ knp_pagination_render(pagination) }}
-                </div>
-            {% endblock %}
-        </div> <!-- / #content-wrapper -->
-        <div id="main-menu-bg"></div>
-    </div> <!-- / #main-wrapper -->
+									<span class="label label-{% if historial.idEstado == 1 %}info{% elseif historial.idEstado == 4 %}success{% else %}warning{% endif %}">
+										{{ historial.nombreEstado }}
+									</span>
+									{{ historial.nombresUsuario }} {{ historial.apellidoPaternoUsuario }} {{ historial.apellidoMaternoUsuario }} <small>({{ historial.fechaInstrumento | date('Y-m-d H:i:s') }})</small>
+								</dd>
+							</dl>
+							<hr class="panel-wide">
+							<dl class="dl-horizontal">
+								<dt>Nombre</dt>
+								<dd class="nombre-instrumento">{{ instrumento.nombreInstrumento }}</dd>
+								<dt>Descripción</dt>
+								<dd>{{ instrumento.descripcionInstrumento }}</dd>
+							</dl>
+						</div>
+						<div class="panel-footer">
+							<div class="text-right">
+								{# <div class="btn-group"> #}
+								<a href="{{ path('desarrolloInstrumentos_instrumentoEditar', { 'id': instrumento.idInstrumento }) }}" class="btn btn-flat btn-labeled btn-warning">
+									<span class="btn-label icon fa fa-pencil"></span>
+									Editar
+								</a>
+								<a class="btn-clonar-instrumento btn btn-flat btn-labeled btn-primary" data-id="{{ instrumento.idInstrumento }}">
+									<span class="btn-label icon fa fa-files-o"></span>
+									Clonar
+								</a>
+								<a href="{{ path('desarrolloInstrumentos_instrumentoVer', { 'id': instrumento.idInstrumento }) }}" class="btn btn-flat btn-labeled btn-info">
+									<span class="btn-label icon fa fa-eye"></span>
+									Ver
+								</a>
+								{# </div> #}
+								<div class="clear-fix"></div>
+							</div>
+							<div class="clear-fix"></div>
+						</div>
+					</div>
+				{% endfor %}
+
+				<div class="navigation text-center">
+					{{ knp_pagination_render(pagination) }}
+				</div>
+			{% endblock %}
+		</div> <!-- / #content-wrapper -->
+		<div id="main-menu-bg"></div>
+	</div> <!-- / #main-wrapper -->
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        $('#btn-busqueda-avanzada').on('click', function(event) {
-            event.preventDefault();
-            
-        });
-    </script>
+	<script>
+		init.push(function () {
+			$('#btn-busqueda-avanzada').on('click', function(event) {
+				event.preventDefault();
+
+				$.ajax({
+					url: '{{ path('desarrolloInstrumentos_instrumentoObtenerFormularioBusqueda') }}',
+					type: 'GET',
+					data: null,
+				})
+				.done(function(data) {
+					bootbox.dialog({
+						message: data,
+						title: "Búsqueda Avanzada",
+						buttons: {
+							success: {
+								label: "Buscar",
+								className: "btn-success",
+								callback: function() {
+									$('#form-busqueda-avanzada-instrumentos').submit();
+								}
+							}
+						}
+					});
+				});			
+			});
+
+			// Clonar Instrumento
+			$('.btn-clonar-instrumento').on('click', function(event) {
+				event.preventDefault();
+
+				nombre = $(this).closest('.panel').find('.nombre-instrumento').html();
+				id     = $(this).data('id');
+
+				url    = '{{ path('desarrolloInstrumentos_instrumentoClonar', { 'id': '@ID@' }) }}';
+				url    = url.replace('@ID@', id);
+
+				console.log(id);
+				console.log(url);
+
+				bootbox.prompt({
+					title: "Ingresar nombre del Instrumento",
+					value: "Clon: " + nombre,
+					callback: function(result) {
+						if (result != null) {
+							datos = {
+								'nombre': result
+							}
+
+							$.ajax({
+								url:  url,
+								type: 'POST',
+								data: datos,
+							})
+							.done(function(data) {
+								bootbox.confirm({
+									message: "Instrumento clonado correctamente",
+									callback: function(result) {
+										window.location = data;
+									},
+									className: "bootbox-sm"
+								});
+							})
+							.fail(function(data) {
+								bootbox.confirm({
+									message: "Hubo un error al clonar el instrumento",
+									callback: function(result) {
+
+									},
+									className: "bootbox-sm"
+								});
+							});
+						}
+					}
+				});
+			});
+			//
+		});
+
+		// INIT
+		window.PixelAdmin.start(init);
+	</script>
 {% endblock %}

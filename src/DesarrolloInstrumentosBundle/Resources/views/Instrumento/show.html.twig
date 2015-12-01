@@ -29,31 +29,31 @@
 			<tbody>
 				<tr>
 					<th>Tipo Instrumento</th>
-					<td>## CAMBIAR ##</td>
+					<td>{{ entity.getTip().getNombre() }}</td>
 				</tr>
 				<tr>
 					<th>Plan</th>
-					<td>## CAMBIAR ##</td>
+					<td>{{ entity.getPla().getNombre() }}</td>
 				</tr>
 				<tr>
 					<th>Periodo</th>
-					<td>## CAMBIAR ##</td>
+					<td>{{ entity.getPer().getNombre() }}</td>
 				</tr>
 				<tr>
 					<th>Nivel</th>
-					<td>## CAMBIAR ##</td>
+					<td>{{ entity.getNiv().getNombre() }}</td>
 				</tr>
 				<tr>
 					<th>Área</th>
-					<td>## CAMBIAR ##</td>
+					<td>{{ entity.getAre().getNombre() }}</td>
 				</tr>
 				<tr>
 					<th>Nombre</th>
-					<td>## CAMBIAR ##</td>
+					<td>{{ entity.getNombre() }}</td>
 				</tr>
 				<tr>
 					<th>Descripción</th>
-					<td>## CAMBIAR ##</td>
+					<td>{{ entity.getDescripcion() }}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -61,7 +61,7 @@
 			<div class="text-right">
 				{# <div class="btn-group"> #}
 				<a href="{{ path('desarrolloInstrumentos_instrumentoPrevisualizar', { 'id': id }) }}" class="btn btn-flat btn-labeled btn-info"><span class="btn-label icon fa fa-eye"></span>Previsualizar</a>
-				<a href="#" class="btn btn-flat btn-labeled btn-warning"><span class="btn-label icon fa fa-pencil"></span>Editar</a>
+				<a href="{{ path('desarrolloInstrumentos_instrumentoEditar', { 'id': id }) }}" class="btn btn-flat btn-labeled btn-warning"><span class="btn-label icon fa fa-pencil"></span>Editar</a>
 				<a id="btn-clonar-instrumento" href="#" class="btn btn-flat btn-labeled btn-primary"><span class="btn-label icon fa fa-files-o"></span>Clonar</a>
 				<a id="btn-eliminar-instrumento" href="#" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-trash-o"></span>Eliminar</a>
 				{# </div> #}

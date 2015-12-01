@@ -10,8 +10,14 @@ security:
             id: fos_user.user_provider.username
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_COORDINADOR_ACADEMICO_GENERAL:  ROLE_USER
+        ROLE_COORDINADOR_ACADEMICO_POR_AREA: ROLE_USER
+        ROLE_DESARROLLADOR_INSTRUMENTO:      ROLE_USER
+        ROLE_VALIDADOR_INSTRUMENTO:          ROLE_USER
+        ROLE_CONSTRUCTOR_INSTRUMENTO:        ROLE_USER
+        ROLE_VALIDADOR_DISENIO:              ROLE_USER
+        ROLE_ADMIN:                          ROLE_USER
+        ROLE_SUPER_ADMIN:                    ROLE_ADMIN
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs

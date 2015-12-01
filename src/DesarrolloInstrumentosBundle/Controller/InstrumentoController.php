@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use AppModelBundle\Entity\Instrumento;
 use AppModelBundle\Entity\InstrumentoItem;
+use AppModelBundle\Entity\HistorialPatronInstrumento;
 use DesarrolloInstrumentosBundle\Form\InstrumentoType;
 
 /**
@@ -23,11 +24,16 @@ class InstrumentoController extends Controller
 	 */
 	public function listadoAction(Request $request)
 	{
-		$esBusqueda = $request->query->getBoolean('busqueda', false);
-		$idInstrumento     = $request->query->getInt('id', null);
+		$esBusqueda    = $request->query->getBoolean('busqueda', false);
+		$idInstrumento = $request->query->get('id', null);
 
-		if ($esBusqueda && ($idInstrumento != null)) {
-			$arrInstrumentos = $this->get('desarrolloInstrumentos.Instrumento')->obtenerInstrumentosPorId($idInstrumento);
+		if ($esBusqueda && ($idInstrumento != 0)) {
+			$arrOpciones = array('idInstrumento' => $idInstrumento);
+			$arrInstrumentos = $this->get('desarrolloInstrumentos.Instrumento')->obtenerInstrumentos($arrOpciones);
+		} elseif ($esBusqueda && ($idInstrumento == 0)) {
+			$arrOpciones = $request->query->get('desarrolloinstrumentosbundle_instrumento');
+
+			$arrInstrumentos = $this->get('desarrolloInstrumentos.Instrumento')->obtenerInstrumentos($arrOpciones);		
 		} else {
 			$arrInstrumentos = $this->get('desarrolloInstrumentos.Instrumento')->obtenerInstrumentos();
 		}
@@ -40,9 +46,19 @@ class InstrumentoController extends Controller
 			$this->container->getParameter('cantidadInstrumentosPorPagina')
 			);
 
+		$arrIdInstrumentos = array();
+
+		foreach ($pagination as $instrumento) {
+			$arrIdInstrumentos[] = $instrumento[ 'idInstrumento' ];
+		}
+
+		$arrEstadosInstrumento = $this->obtenerEstadosInstrumentos( $arrIdInstrumentos );
+
 		return $this->render('DesarrolloInstrumentosBundle:Instrumento:index.html.twig', 
 			array(
-				'pagination' => $pagination,
+				'pagination'            => $pagination,
+				'arrIdInstrumentos'     => $arrIdInstrumentos,
+				'arrEstadosInstrumento' => $arrEstadosInstrumento,
 				)
 			);
 	}
@@ -131,6 +147,24 @@ class InstrumentoController extends Controller
 	}
 
 	/**
+	 * Obtener el formulario para la búsqueda avanzada.
+	 */
+	public function obtenerFormularioBusquedaAction()
+	{
+		$entity   = new Instrumento();
+
+		$form     = $this->createCreateForm($entity);
+
+		$strVista = $this->renderView('DesarrolloInstrumentosBundle:Instrumento:_search.html.twig', 
+			array(
+				'form'   => $form->createView(),
+				)
+			);
+
+		return new Response( $strVista );
+	}
+
+	/**
 	 * Muestra el formulario para crear un Instrumento.
 	 */
 	public function nuevoAction()
@@ -147,7 +181,7 @@ class InstrumentoController extends Controller
 	}
 
 	/**
-	 * Valida y guarda el formulario.
+	 * Valida y guarda el formulario para crear.
 	 */
 	public function crearAction(Request $request)
 	{
@@ -160,10 +194,38 @@ class InstrumentoController extends Controller
 			$em = $this->getDoctrine()->getManager();
 
 			// Seteando los datos del Ajax.
-			$entity->setAre( $form['area']->getData() );
-			$entity->setNiv( $form['nivel']->getData() );
+			// $entity->setAre( $form['area']->getData() );
+			// $entity->setNiv( $form['nivel']->getData() );
+			// $entity->setPla( $form['plan']->getData() );
+			$entity->setPer(
+				$em->getReference(
+					'AppModelBundle:Periodo', $form['periodo']->getData()
+					)
+				);
+
+			$entity->setFechaCreacion( new \DateTime() );
+			$entity->setUser( $this->getUser() );
+			$entity->setEst(
+				$em->getReference(
+					'AppModelBundle:EstadoInstrumento', 1
+					)
+				);
 
 			$em->persist($entity);
+
+			$oHistorialPatronInstrumento = new HistorialPatronInstrumento();
+			$oHistorialPatronInstrumento->setObservacion('Creado');
+			$oHistorialPatronInstrumento->setFecha(new \DateTime());
+			$oHistorialPatronInstrumento->setEst(
+				$em->getReference(
+					'AppModelBundle:EstadoInstrumento', 1
+					)
+				);
+			$oHistorialPatronInstrumento->setIns($entity);
+			$oHistorialPatronInstrumento->setUser($this->getUser());
+
+			$em->persist($oHistorialPatronInstrumento);
+
 			$em->flush();
 
 			return $this->redirect($this->generateUrl('desarrolloInstrumentos_instrumentoVer', 
@@ -252,16 +314,16 @@ class InstrumentoController extends Controller
 			$idItem = $item[ 'idItem' ];
 		}
 
-		$arrDatosItem = $this->obtenerDatosItem( $idItem );
+		$arrAlternativas = $this->obtenerAlternativasItem( $idItem );
 
 		return $this->render('DesarrolloInstrumentosBundle:Instrumento:preview.html.twig', 
 			array(
-				'id'           => $id,
-				'page'         => $page,
-				'entity'       => $entity,
-				'esInicio'     => false,
-				'arrDatosItem' => $arrDatosItem,
-				'pagination'   => $pagination,
+				'id'              => $id,
+				'page'            => $page,
+				'entity'          => $entity,
+				'esInicio'        => false,
+				'arrAlternativas' => $arrAlternativas,
+				'pagination'      => $pagination,
 				)
 			);
 	}
@@ -286,6 +348,8 @@ class InstrumentoController extends Controller
 		}
 
 		$this->get('desarrolloInstrumentos.Item')->eliminarItemsPorInstrumento($idInstrumento);
+		$this->get('desarrolloInstrumentos.Instrumento')->eliminarHistorialPorInstrumento($idInstrumento);
+		$this->get('desarrolloInstrumentos.Instrumento')->eliminarRelacionPorInstrumento($idInstrumento);
 
 		$em->remove($instrumento);
 		$em->flush();
@@ -317,6 +381,9 @@ class InstrumentoController extends Controller
 		$instrumentoClon->setNombre( $nombre );
 		$instrumentoClon->setIns( $instrumento );
 
+		$instrumentoClon->setFechaCreacion( new \DateTime() );
+		$instrumentoClon->setUser( $this->getUser() );
+
 		$em->persist( $instrumentoClon );
 
 		// Clonar la relación entre el instrumento y los ítems
@@ -333,6 +400,19 @@ class InstrumentoController extends Controller
 			$em->persist( $itemClon );
 		}
 
+		$oHistorialPatronInstrumento = new HistorialPatronInstrumento();
+		$oHistorialPatronInstrumento->setObservacion('Creado');
+		$oHistorialPatronInstrumento->setFecha(new \DateTime());
+		$oHistorialPatronInstrumento->setEst(
+			$em->getReference(
+				'AppModelBundle:EstadoInstrumento', 1
+				)
+			);
+		$oHistorialPatronInstrumento->setIns($instrumentoClon);
+		$oHistorialPatronInstrumento->setUser($this->getUser());
+
+		$em->persist($oHistorialPatronInstrumento);
+
 		$em->flush();
 
 		$urlResponse = $this->generateUrl('desarrolloInstrumentos_instrumentoVer', 
@@ -345,11 +425,9 @@ class InstrumentoController extends Controller
 	}
 
 	/**
-	 * NO
-	 * Displays a form to edit an existing Instrumento entity.
-	 *
+	 * Muestra el formulario para editar un Instrumento.
 	 */
-	public function editAction($id)
+	public function editarAction($id)
 	{
 		$em = $this->getDoctrine()->getManager();
 
@@ -359,28 +437,32 @@ class InstrumentoController extends Controller
 			throw $this->createNotFoundException('Unable to find Instrumento entity.');
 		}
 
-		$editForm = $this->createEditForm($entity);
+		$form = $this->createEditForm($entity);
 
-		return $this->render('DesarrolloInstrumentosBundle:Instrumento:edit.html.twig', array(
-			'entity'      => $entity,
-			'edit_form'   => $editForm->createView(),
-			));
+		return $this->render('DesarrolloInstrumentosBundle:Instrumento:edit.html.twig', 
+			array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+				)
+			); 
 	}
 
 	/**
-	 * NO
-	* Creates a form to edit a Instrumento entity.
-	*
-	* @param Instrumento $entity The entity
-	*
-	* @return \Symfony\Component\Form\Form The form
-	*/
+	 * Retorna el formulario para editar un Instrumento.
+	 *
+	 * @param Instrumento $entity The entity
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
 	private function createEditForm(Instrumento $entity)
 	{
-		$form = $this->createForm(new InstrumentoType(), $entity, array(
-			'action' => $this->generateUrl('item_update', array('id' => $entity->getId())),
-			'method' => 'PUT',
-			));
+		$form = $this->createForm(new InstrumentoType(), $entity, 
+			array(
+				'action' => $this->generateUrl('desarrolloInstrumentos_instrumentoActualizar', array('id' => $entity->getId())),
+				'method' => 'PUT',
+				'periodo' => $this->container->getParameter('idPeriodoVigente')
+				)
+			);
 
 		$form->add('submit', 'submit', array('label' => 'Update'));
 
@@ -388,11 +470,9 @@ class InstrumentoController extends Controller
 	}
 	
 	/**
-	 * NO
-	 * Edits an existing Instrumento entity.
-	 *
+	 * Valida y guarda el formulario para crear.
 	 */
-	public function updateAction(Request $request, $id)
+	public function actualizarAction(Request $request, $id)
 	{
 		$em = $this->getDoctrine()->getManager();
 
@@ -402,19 +482,21 @@ class InstrumentoController extends Controller
 			throw $this->createNotFoundException('Unable to find Instrumento entity.');
 		}
 
-		$editForm = $this->createEditForm($entity);
-		$editForm->handleRequest($request);
+		$form = $this->createEditForm($entity);
+		$form->submit($request);
 
-		if ($editForm->isValid()) {
+		if ($form->isValid()) {
 			$em->flush();
 
-			return $this->redirect($this->generateUrl('item_edit', array('id' => $id)));
+			return $this->redirect($this->generateUrl('desarrolloInstrumentos_instrumentoVer', array('id' => $id)));
 		}
 
-		return $this->render('DesarrolloInstrumentosBundle:Instrumento:edit.html.twig', array(
-			'entity'      => $entity,
-			'edit_form'   => $editForm->createView(),
-			));
+		return $this->render('DesarrolloInstrumentosBundle:Instrumento:edit.html.twig', 
+			array(
+				'entity'      => $entity,
+				'form'   => $form->createView(),
+				)
+			);
 	}
 
 	/**
@@ -426,11 +508,13 @@ class InstrumentoController extends Controller
 	 */
 	private function createCreateForm(Instrumento $entity)
 	{
-		return $this->createForm(new InstrumentoType(), $entity, array(
-			'action' => $this->generateUrl('desarrolloInstrumentos_instrumentoCrear'),
-			'method' => 'POST',
-			)
-		);
+		return $this->createForm(new InstrumentoType(), $entity, 
+			array(
+				'action'  => $this->generateUrl('desarrolloInstrumentos_instrumentoCrear'),
+				'method'  => 'POST',
+				'periodo' => $this->container->getParameter('idPeriodoVigente')
+				)
+			);
 	}
 
 	public function obtenerItemsPorInstrumento($idInstrumento, $returnQuery = false)
@@ -442,8 +526,27 @@ class InstrumentoController extends Controller
 		return $repItem->obtenerItemsPorInstrumento($idInstrumento);
 	}
 
-	public function obtenerDatosItem($idInstrumento)
+	public function obtenerAlternativasItem($idItem)
 	{
-		return array();
+		$repItem = $this->get('desarrolloInstrumentos.Alternativa');
+
+		return $repItem->obtenerAlternativasPorItem($idItem);
+	}
+
+	public function obtenerEstadosInstrumentos($arrIdInstrumentos)
+	{
+		$estadosInstrumentos = $this->get('desarrolloInstrumentos.Instrumento')->obtenerEstadosInstrumentos($arrIdInstrumentos);
+
+		$arrReturn = array();
+
+		foreach ($estadosInstrumentos as $historial) {
+			if (!array_key_exists($historial[ 'idInstrumento' ], $arrReturn)) {
+				$arrReturn[ $historial[ 'idInstrumento' ] ] = array();
+			}
+
+			$arrReturn[ $historial[ 'idInstrumento' ] ] = $historial;
+		}
+
+		return $arrReturn;
 	}
 }

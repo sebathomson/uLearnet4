@@ -26,21 +26,21 @@
 					</div>
 				</div>
 				<div class="row form-group">
-					<label for="{{ form.plan.vars.id }}" class="col-sm-4 control-label">{{ form.plan.vars.label }}:</label>
+					<label for="{{ form.pla.vars.id }}" class="col-sm-4 control-label">{{ form.pla.vars.label }}:</label>
 					<div class="col-sm-8">
-						{{ form_widget(form.plan, { 'attr': {'class': 'form-control'} }) }}
+						{{ form_widget(form.pla, { 'attr': {'class': 'form-control'} }) }}
 					</div>
 				</div>
 				<div class="row form-group">
-					<label for="{{ form.nivel.vars.id }}" class="col-sm-4 control-label">{{ form.nivel.vars.label }}:</label>
+					<label for="{{ form.niv.vars.id }}" class="col-sm-4 control-label">{{ form.niv.vars.label }}:</label>
 					<div class="col-sm-8">
-						{{ form_widget(form.nivel, { 'attr': {'class': 'form-control'} }) }}
+						{{ form_widget(form.niv, { 'attr': {'class': 'form-control'} }) }}
 					</div>
 				</div>
 				<div class="row form-group">
-					<label for="{{ form.area.vars.id }}" class="col-sm-4 control-label">{{ form.area.vars.label }}:</label>
+					<label for="{{ form.are.vars.id }}" class="col-sm-4 control-label">{{ form.are.vars.label }}:</label>
 					<div class="col-sm-8">
-						{{ form_widget(form.area, { 'attr': {'class': 'form-control'} }) }}
+						{{ form_widget(form.are, { 'attr': {'class': 'form-control'} }) }}
 					</div>
 				</div>
 				<hr class="panel-wide">
@@ -53,12 +53,13 @@
 				<div class="row form-group">
 					<label for="{{ form.descripcion.vars.id }}" class="col-sm-4 control-label">{{ form.descripcion.vars.label }}:</label>
 					<div class="col-sm-8">
-						{{ form_widget(form.descripcion, { 'attr': {'class': 'form-control'} }) }}
+						{{ form_widget(form.descripcion, { 'attr': {'class': 'form-control', 'rows': "5"} }) }}
 					</div>
 				</div>
 				<div class="row form-group hidden">
 					<div class="col-sm-8">
 						{{ form_widget(form._token) }}
+						{{ form_widget(form.periodo) }}
 					</div>
 				</div>
 			</div>
@@ -81,13 +82,13 @@
 	<script>
 		function obtenerNivelesPorPlan() {
 			datos = {
-				'idPlan': $('#{{ form.plan.vars.id }}').val(),
+				'idPlan': $('#{{ form.pla.vars.id }}').val(),
 			};
 
 			$.getJSON('{{ path('apiObtenerNivelesPorPlan') }}', datos, function(data, textStatus, xhr) {
-				select = $('#{{ form.nivel.vars.id }}').find('option').first().text();
+				select = $('#{{ form.niv.vars.id }}').find('option').first().text();
 
-				$('#{{ form.nivel.vars.id }}').html('');
+				$('#{{ form.niv.vars.id }}').html('');
 
 				var options = '<option value="" selected="selected">' + select + '</option>';
 
@@ -95,29 +96,29 @@
 					options += "<option value=" + data[i].idNivel + ">" + data[i].nombreNivel + '</option>';
 				};
 
-				$('#{{ form.nivel.vars.id }}').html(options);
+				$('#{{ form.niv.vars.id }}').html(options);
 
 				// Limpiar el select de las áreas.
-				select = $('#{{ form.area.vars.id }}').find('option').first().text();
+				select = $('#{{ form.are.vars.id }}').find('option').first().text();
 
-				$('#{{ form.area.vars.id }}').html('');
+				$('#{{ form.are.vars.id }}').html('');
 
 				var options = '<option value="" selected="selected">' + select + '</option>';
 
-				$('#{{ form.area.vars.id }}').html(options);
+				$('#{{ form.are.vars.id }}').html(options);
 			});
 		}
 
 		function obtenerAreasPorPlan() {
 			datos = {
-				'idPlan': $('#{{ form.plan.vars.id }}').val(),
-				'idNivel': $('#{{ form.nivel.vars.id }}').val()
+				'idPlan': $('#{{ form.pla.vars.id }}').val(),
+				'idNivel': $('#{{ form.niv.vars.id }}').val()
 			};
 
 			$.getJSON('{{ path('apiObtenerAreasPorPlan') }}', datos, function(data, textStatus, xhr) {
-				select = $('#{{ form.area.vars.id }}').find('option').first().text();
+				select = $('#{{ form.are.vars.id }}').find('option').first().text();
 
-				$('#{{ form.area.vars.id }}').html('');
+				$('#{{ form.are.vars.id }}').html('');
 
 				var options = '<option value="" selected="selected">' + select + '</option>';
 
@@ -125,16 +126,16 @@
 					options += "<option value=" + data[i].idArea + ">" + data[i].nombreArea + '</option>';
 				};
 
-				$('#{{ form.area.vars.id }}').html(options);
+				$('#{{ form.are.vars.id }}').html(options);
 			});   
 		}
 
-		$('#{{ form.plan.vars.id }}').on('change', function(event) {
+		$('#{{ form.pla.vars.id }}').on('change', function(event) {
 			event.preventDefault();
 			obtenerNivelesPorPlan( $(this).val() );
 		});
 
-		$('#{{ form.nivel.vars.id }}').on('change', function(event) {
+		$('#{{ form.niv.vars.id }}').on('change', function(event) {
 			event.preventDefault();
 			obtenerAreasPorPlan( $(this).val() );
 		});

@@ -38,12 +38,11 @@ class AddAreaFieldSubscriber implements EventSubscriberInterface
         $options['plan']  = $plan;
         $options['nivel'] = $nivel;
 
-        $form->add($this->factory->createNamed('area', 'entity', null, 
+        $form->add($this->factory->createNamed('are', 'entity', null, 
             array(
                 'label'           => 'Area',
                 'class'           => 'AppModelBundle:Area',
                 'choice_label'    => 'nombre',
-                'mapped'          => false,
                 'auto_initialize' => false,
                 'empty_value'     => 'Seleccionar Area',
                 'query_builder'   => function (EntityRepository $repository) use ($options)
@@ -59,7 +58,8 @@ class AddAreaFieldSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
         $form = $event->getForm();
-        $this->addFieldForm($form);
+
+        $this->addFieldForm($form, $data->getPla(), $data->getNiv());
     }
 
     public function preBind(FormEvent $event)
@@ -71,8 +71,8 @@ class AddAreaFieldSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $plan  = array_key_exists('plan', $data) ? $data['plan'] : null;
-        $nivel = array_key_exists('nivel', $data) ? $data['nivel'] : null;
+        $plan  = array_key_exists('pla', $data) ? $data['pla'] : null;
+        $nivel = array_key_exists('niv', $data) ? $data['niv'] : null;
 
         $this->addFieldForm($form, $plan, $nivel);
     }

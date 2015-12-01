@@ -7,3 +7,7 @@ services:
         public: true
         class: DesarrolloInstrumentosBundle\Repositories\InstrumentoRepository
         arguments: { entityManager: "@doctrine.orm.entity_manager" }
+    desarrolloInstrumentos.Alternativa:
+        public: true
+        class: DesarrolloInstrumentosBundle\Repositories\AlternativaRepository
+        arguments: { entityManager: "@doctrine.orm.entity_manager" }

@@ -35,11 +35,10 @@ class InstrumentoType extends AbstractType
 			})
 		);
 
-		$builder->add('plan', 'entity', array(
+		$builder->add('pla', 'entity', array(
 			'label'          => 'Plan'
 			,'class'         => 'AppModelBundle:Plan'
 			,'choice_label'  => 'nombre'
-			,'mapped'        => false
 			,'empty_value'   => 'Seleccionar Plan'
 			,'query_builder' => function (\Doctrine\ORM\EntityRepository $repository) {
 				return $this->devuelveQueryPlan($repository);
@@ -60,6 +59,13 @@ class InstrumentoType extends AbstractType
 		$builder->add('descripcion', null, array(
 			'label'    => 'Descripción',
 			'required' => true,
+			)
+		);
+		$builder->add('periodo', null, array(
+			'label'    => 'Periodo',
+			'mapped'   => false,
+			'required' => true,
+			'data'     => $options['periodo'],
 			)
 		);
 	}

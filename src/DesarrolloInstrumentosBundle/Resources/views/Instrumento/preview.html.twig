@@ -15,23 +15,23 @@
 				<div class="col-md-3">
 					<dl>
 						<dt>Tipo Instrumento</dt>
-						<dd>## CAMBIAR ##</dd>
+						<dd>{{ entity.getTip().getNombre() }}</dd>
 					</dl>
 					<dl>
 						<dt>Plan</dt>
-						<dd>## CAMBIAR ##</dd>
+						<dd>{{ entity.getPla().getNombre() }}</dd>
 					</dl>
 					<dl>
 						<dt>Periodo</dt>
-						<dd>## CAMBIAR ##</dd>
+						<dd>{{ entity.getPer().getNombre() }}</dd>
 					</dl>
 					<dl>
 						<dt>Nivel</dt>
-						<dd>## CAMBIAR ##</dd>
+						<dd>{{ entity.getNiv().getNombre() }}</dd>
 					</dl>
 					<dl>
 						<dt>Área</dt>
-						<dd>## CAMBIAR ##</dd>
+						<dd>{{ entity.getAre().getNombre() }}</dd>
 					</dl>
 				</div>
 				<div class="col-md-9 text-center">
@@ -45,11 +45,11 @@
 		<div class="jumbotron">
 			<div class="container-fluid">
 				<ul class="breadcrumb breadcrumb-page">
-					<li>Tipo Instrumento: <strong>## Cambiar ##</strong></li>
-					<li>Plan: <strong>## Cambiar ##</strong></li>
-					<li>Periodo: <strong>## Cambiar ##</strong></li>
-					<li>Nivel: <strong>## Cambiar ##</strong></li>
-					<li>Área: <strong>## Cambiar ##</strong></li>
+					<li>Tipo Instrumento: <strong>{{ entity.getTip().getNombre() }}</strong></li>
+					<li>Plan: <strong>{{ entity.getPla().getNombre() }}</strong></li>
+					<li>Periodo: <strong>{{ entity.getPer().getNombre() }}</strong></li>
+					<li>Nivel: <strong>{{ entity.getNiv().getNombre() }}</strong></li>
+					<li>Área: <strong>{{ entity.getAre().getNombre() }}</strong></li>
 					<li>Ítem: <strong>{{ page }}</strong></li>
 				</ul>
 
@@ -57,24 +57,14 @@
 					<p>{{ item.preguntaItem | raw() }}</p>
 					<hr>
 					<p>
-						<div class="radio">
-							<label>
-								<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" class="px" checked="">
-								<span class="lbl">## Cambiar ## hay que arreglar la relación ítem -> alternativa</span>
-							</label>
-						</div> <!-- / .radio -->
-						<div class="radio">
-							<label>
-								<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" class="px">
-								<span class="lbl">## Cambiar ## hay que arreglar la relación ítem -> alternativa</span>
-							</label>
-						</div> <!-- / .radio -->
-						<div class="radio">
-							<label>
-								<input type="radio" name="optionsRadios" id="optionsRadios2-2" value="option2" class="px">
-								<span class="lbl">## Cambiar ## hay que arreglar la relación ítem -> alternativa</span>
-							</label>
-						</div> <!-- / .radio -->
+						{% for alternativa in arrAlternativas %}
+							<div class="radio">
+								<label>
+									<input type="radio" name="alternativa" value="alternativa[{{ item.idItem }}][{{ alternativa.idAlternativa }}]" class="px" checked="">
+									<span class="lbl">{{ alternativa.textoAlternativa | raw() }}</span>
+								</label>
+							</div> <!-- / .radio -->
+						{% endfor %}
 					</p>
 					<hr>
 				{% endfor %}

@@ -2,6 +2,10 @@ desarrolloInstrumentos_instrumentoListado:
     path:     /listado
     defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:listado" }
 
+desarrolloInstrumentos_instrumentoObtenerFormularioBusqueda:
+    path:     /obtenerFormularioBusqueda
+    defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:obtenerFormularioBusqueda" }
+
 desarrolloInstrumentos_instrumentoVer:
     path:     /{id}/ver
     defaults: { _controller: "DesarrolloInstrumentosBundle:Instrumento:ver" }

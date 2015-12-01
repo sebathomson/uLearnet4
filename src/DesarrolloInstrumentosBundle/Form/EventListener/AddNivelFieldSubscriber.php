@@ -34,12 +34,11 @@ class AddNivelFieldSubscriber implements EventSubscriberInterface
 
 	private function addFieldForm($form, $plan = null)
 	{    
-		$form->add($this->factory->createNamed('nivel', 'entity', null, 
+		$form->add($this->factory->createNamed('niv', 'entity', null, 
 			array(
 				'label'           => 'Nivel',
 				'class'           => 'AppModelBundle:Nivel',
 				'choice_label'    => 'nombre',
-				'mapped'          => false,
 				'auto_initialize' => false,
 				'empty_value'     => 'Seleccionar Nivel',
 				'query_builder'   => function (EntityRepository $repository) use ($plan)
@@ -55,7 +54,8 @@ class AddNivelFieldSubscriber implements EventSubscriberInterface
 	{
 		$data = $event->getData();
 		$form = $event->getForm();
-		$this->addFieldForm($form);
+
+		$this->addFieldForm($form, $data->getPla());
 	}
 
 	public function preBind(FormEvent $event)
@@ -67,7 +67,7 @@ class AddNivelFieldSubscriber implements EventSubscriberInterface
 			return;
 		}
 
-		$plan = array_key_exists('plan', $data) ? $data['plan'] : null;
+		$plan = array_key_exists('pla', $data) ? $data['pla'] : null;
 
 		$this->addFieldForm($form, $plan);
 	}
