@@ -92,7 +92,7 @@
 		<div class="panel-footer">
 			<div class="text-right">
 				{# <div class="btn-group"> #}
-				<a href="#" class="btn btn-flat btn-labeled btn-info"><span class="btn-label icon fa fa-book"></span>Historial</a>
+				<a id="btn-ver-historial" href="#" class="btn btn-flat btn-labeled btn-info"><span class="btn-label icon fa fa-book"></span>Historial</a>
 				<a href="#" class="btn btn-flat btn-labeled btn-success"><span class="btn-label icon fa fa-floppy-o"></span>Validar</a>
 				{# </div> #}
 				<div class="clear-fix"></div>
@@ -236,6 +236,31 @@
 					}
 				});
 				//
+			});
+
+			$('#btn-ver-historial').on('click', function(event) {
+				event.preventDefault();
+
+				$.ajax({
+					url: '{{ path('desarrolloInstrumentos_instrumentoVerHistorial', { 'id': id }) }}',
+					type: 'GET',
+					data: null,
+				})
+				.done(function(data) {
+					bootbox.dialog({
+						message: data,
+						title: "Ver Historial",
+						buttons: {
+							success: {
+								label: "Ok",
+								className: "btn-info",
+								callback: function() {
+									
+								}
+							}
+						}
+					});
+				});			
 			});
 
 			// Agregar items a un instrumento

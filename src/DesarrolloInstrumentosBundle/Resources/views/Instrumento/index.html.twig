@@ -85,8 +85,8 @@
 								<tr>
 									<td>{{ instrumento.nombreTipoInstrumento }}</td>
 									<td>{{ instrumento.nombrePlan }}</td>
-									<td>{{ instrumento.nombreArea }}</td>
 									<td>{{ instrumento.nombreNivel }}</td>
+									<td>{{ instrumento.nombreArea }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -133,6 +133,11 @@
 							</div>
 							<div class="clear-fix"></div>
 						</div>
+					</div>
+					{% else %}
+					<div class="alert alert-danger alert-dark">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						<strong>Sin resultados!</strong> {% if esBusqueda %}No existen Instrumentos con estos parámetros de búsqueda.{% else %}No existen Instrumentos.{% endif %}
 					</div>
 				{% endfor %}
 

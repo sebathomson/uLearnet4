@@ -10,6 +10,7 @@ use AppModelBundle\Entity\Instrumento;
 use AppModelBundle\Entity\InstrumentoItem;
 use AppModelBundle\Entity\HistorialPatronInstrumento;
 use DesarrolloInstrumentosBundle\Form\InstrumentoType;
+use DesarrolloInstrumentosBundle\Form\InstrumentoSearchType;
 
 /**
  * 
@@ -27,7 +28,7 @@ class InstrumentoController extends Controller
 		$esBusqueda    = $request->query->getBoolean('busqueda', false);
 		$idInstrumento = $request->query->get('id', null);
 
-		if ($esBusqueda && ($idInstrumento != 0)) {
+		if ($esBusqueda && ($idInstrumento != 'none')) {
 			$arrOpciones = array('idInstrumento' => $idInstrumento);
 			$arrInstrumentos = $this->get('desarrolloInstrumentos.Instrumento')->obtenerInstrumentos($arrOpciones);
 		} elseif ($esBusqueda && ($idInstrumento == 0)) {
@@ -56,6 +57,7 @@ class InstrumentoController extends Controller
 
 		return $this->render('DesarrolloInstrumentosBundle:Instrumento:index.html.twig', 
 			array(
+				'esBusqueda'            => $esBusqueda,
 				'pagination'            => $pagination,
 				'arrIdInstrumentos'     => $arrIdInstrumentos,
 				'arrEstadosInstrumento' => $arrEstadosInstrumento,
@@ -153,7 +155,7 @@ class InstrumentoController extends Controller
 	{
 		$entity   = new Instrumento();
 
-		$form     = $this->createCreateForm($entity);
+		$form     = $this->createSearchForm($entity);
 
 		$strVista = $this->renderView('DesarrolloInstrumentosBundle:Instrumento:_search.html.twig', 
 			array(
@@ -265,6 +267,30 @@ class InstrumentoController extends Controller
 				// 'isAjax'      => false,
 				'arrItems'    => $arrItems,
 				'entity'      => $entity,
+				)
+			);
+	}
+
+	/**
+	 * Encuentra y muestra el historial de un Instrumento.
+	 */
+	public function verHistorialAction($id) 
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('AppModelBundle:Instrumento')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Instrumento entity.');
+		}
+
+		$arrHistorial = $this->obtenerHistorialPorInstrumento( $id );
+
+		return $this->render('DesarrolloInstrumentosBundle:Instrumento:_history.html.twig', 
+			array(
+				'id'           => $id,
+				'arrHistorial' => $arrHistorial,
+				'entity'       => $entity,
 				)
 			);
 	}
@@ -517,6 +543,18 @@ class InstrumentoController extends Controller
 			);
 	}
 
+	/**
+	 * Retorna el formulario para buscar un Instrumento.
+	 *
+	 * @param Instrumento $entity The entity
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createSearchForm()
+	{
+		return $this->createForm(new InstrumentoSearchType());
+	}
+
 	public function obtenerItemsPorInstrumento($idInstrumento, $returnQuery = false)
 	{
 		$repItem = $this->get('desarrolloInstrumentos.Item');
@@ -531,6 +569,13 @@ class InstrumentoController extends Controller
 		$repItem = $this->get('desarrolloInstrumentos.Alternativa');
 
 		return $repItem->obtenerAlternativasPorItem($idItem);
+	}
+
+	public function obtenerHistorialPorInstrumento($idInstrumento)
+	{
+		$repItem = $this->get('desarrolloInstrumentos.Instrumento');
+
+		return $repItem->obtenerEstadosInstrumentos(array($idInstrumento));
 	}
 
 	public function obtenerEstadosInstrumentos($arrIdInstrumentos)

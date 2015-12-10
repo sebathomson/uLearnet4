@@ -44,22 +44,22 @@ class InstrumentoRepository
 			$queryPorTipo = ' AND tip.id = :idTipo ';
 		}
 
-		if (array_key_exists('periodo', $arrOpciones) && $arrOpciones[ 'periodo' ] != '')
+		if (array_key_exists('per', $arrOpciones) && $arrOpciones[ 'per' ] != '')
 		{
 			$queryPorPeriodo = ' AND per.id = :idPeriodo ';
 		}
 
-		if (array_key_exists('plan', $arrOpciones) && $arrOpciones[ 'plan' ] != '')
+		if (array_key_exists('pla', $arrOpciones) && $arrOpciones[ 'pla' ] != '')
 		{
 			$queryPorPlan = ' AND pla.id = :idPlan ';
 		}
 
-		if (array_key_exists('nivel', $arrOpciones) && $arrOpciones[ 'nivel' ] != '')
+		if (array_key_exists('niv', $arrOpciones) && $arrOpciones[ 'niv' ] != '')
 		{
 			$queryPorNivel = ' AND niv.id = :idNivel ';
 		}
 
-		if (array_key_exists('area', $arrOpciones) && $arrOpciones[ 'area' ] != '')
+		if (array_key_exists('are', $arrOpciones) && $arrOpciones[ 'are' ] != '')
 		{
 			$queryPorArea = ' AND are.id = :idArea ';
 		}
@@ -126,24 +126,24 @@ class InstrumentoRepository
 			$query->setParameter('idTipo', $arrOpciones[ 'tip' ]);
 		}
 
-		if (array_key_exists('periodo', $arrOpciones) && $arrOpciones[ 'periodo' ] != '')
+		if (array_key_exists('per', $arrOpciones) && $arrOpciones[ 'per' ] != '')
 		{
-			$query->setParameter('idPeriodo', $arrOpciones[ 'periodo' ]);
+			$query->setParameter('idPeriodo', $arrOpciones[ 'per' ]);
 		}
 
-		if (array_key_exists('plan', $arrOpciones) && $arrOpciones[ 'plan' ] != '')
+		if (array_key_exists('pla', $arrOpciones) && $arrOpciones[ 'pla' ] != '')
 		{
-			$query->setParameter('idPlan', $arrOpciones[ 'plan' ]);
+			$query->setParameter('idPlan', $arrOpciones[ 'pla' ]);
 		}
 
-		if (array_key_exists('nivel', $arrOpciones) && $arrOpciones[ 'nivel' ] != '')
+		if (array_key_exists('niv', $arrOpciones) && $arrOpciones[ 'niv' ] != '')
 		{
-			$query->setParameter('idNivel', $arrOpciones[ 'nivel' ]);
+			$query->setParameter('idNivel', $arrOpciones[ 'niv' ]);
 		}
 
-		if (array_key_exists('area', $arrOpciones) && $arrOpciones[ 'area' ] != '')
+		if (array_key_exists('are', $arrOpciones) && $arrOpciones[ 'are' ] != '')
 		{
-			$query->setParameter('idArea', $arrOpciones[ 'area' ]);
+			$query->setParameter('idArea', $arrOpciones[ 'are' ]);
 		}
 
 		if (array_key_exists('nombre', $arrOpciones) && $arrOpciones[ 'nombre' ] != '')
